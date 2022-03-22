@@ -1,6 +1,6 @@
 # Memory Leak Playground
 
-Every `new` or `malloc`  in C++ requires a `delete`/`delete[]` or `free`. Not deallocating allocated stack memory results in memory leaks.
+These are my personal notes for myself to help with future debugging. Every `new` or `malloc`  in C++ requires a `delete`/`delete[]` or `free`. Not deallocating allocated stack memory results in memory leaks.
 
 ## TL;DR
 
