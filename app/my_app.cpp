@@ -13,4 +13,6 @@ int main(const int argc, const char* argv[]) {
     std::this_thread::sleep_for(10ms);
     delete[] arr;
 //  }
+
+    return EXIT_SUCCESS;
 }
