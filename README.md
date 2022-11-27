@@ -10,6 +10,20 @@ These are my personal notes for myself to help with future debugging. Every `new
 4. Press `E` to see memory usage in mb in `Top`.
 5. Run `Valgrind` to find the memory leak: `valgrind --leak-check=full ./my_app`
 
+## `Valgrind`
+
+`Valgrind` displays memory leaks in programs. Running `valgrind FILE` shows how much memory, if any, was leaked:
+
+![Valgrind displaying memory leak](/docs/valgrind.png)
+
+Running `Valgrind` with `--leak-check=full` reveals the place where the memory leak may be happening and the stack trace:
+
+![Valgrind displaying culprit and stack trace](/docs/valgrind-leak-check.png)
+
+After fixing the leak, running `Valgrind` again displays the happy news:
+
+![Valgrind no leaks](/docs/valgrind-no-leak.png)
+
 ## `Top`
 
 `Top` displays Linux processes, but it's not so helpful to run by itself - processes shift around and it's hard to keep track of the one you want:
@@ -35,17 +49,3 @@ top -p $(ps -aux | grep my_app | head -n 1 | awk '{print $2}')
 Which displays the memory usage of the app with the new PID each time `Top` is run. Now press `E` to see the memory displayed in different formats, e.g. MB, GB, TB, etc.
 
 ![Top displaying different memory format](/docs/top-p-e.png)
-
-## `Valgrind`
-
-`Valgrind` displays memory leaks in programs. Running `valgrind FILE` shows how much memory, if any, was leaked:
-
-![Valgrind displaying memory leak](/docs/valgrind.png)
-
-Running `Valgrind` with `--leak-check=full` reveals the place where the memory leak may be happening and the stack trace:
-
-![Valgrind displaying culprit and stack trace](/docs/valgrind-leak-check.png)
-
-After fixing the leak, running `Valgrind` again displays the happy news:
-
-![Valgrind no leaks](/docs/valgrind-no-leak.png)
