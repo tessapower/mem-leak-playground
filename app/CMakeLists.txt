@@ -1,1 +1,1 @@
-add_executable(my_app my_app.cpp leaks.cpp)
+add_executable(mem_leak mem_leak.cpp leaks.cpp)

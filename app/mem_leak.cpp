@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cout << "Usage: my_app <example>\n"
+        std::cout << "Usage: mem_leak <example>\n"
                   << "\n"
                   << "Examples:\n"
                   << "  missing_delete   new[] without delete[]\n"

@@ -5,10 +5,10 @@ These are my personal notes for myself to help with future debugging. Every `new
 ## TL;DR
 
 1. Build: `cmake -B build && cmake --build build`
-2. Run a leak example: `./build/app/my_app missing_delete`
-3. Run `Valgrind` against it: `valgrind --leak-check=full ./build/app/my_app missing_delete`
-4. Or run all examples at once: `valgrind --leak-check=full ./build/app/my_app all`
-5. Use `Top` to watch memory usage: `top -p $(pgrep my_app)`
+2. Run a leak example: `./build/app/mem_leak missing_delete`
+3. Run `Valgrind` against it: `valgrind --leak-check=full ./build/app/mem_leak missing_delete`
+4. Or run all examples at once: `valgrind --leak-check=full ./build/app/mem_leak all`
+5. Use `Top` to watch memory usage: `top -p $(pgrep mem_leak)`
 
 ## Leak Examples
 
@@ -25,19 +25,19 @@ The app includes 5 runnable examples, one per common leak category:
 Run a single example to isolate one leak type in Valgrind output:
 
 ```shell
-valgrind --leak-check=full ./build/app/my_app error_path
+valgrind --leak-check=full ./build/app/mem_leak error_path
 ```
 
 Or run them all:
 
 ```shell
-valgrind --leak-check=full ./build/app/my_app all
+valgrind --leak-check=full ./build/app/mem_leak all
 ```
 
 Run with no arguments to see usage:
 
 ```shell
-./build/app/my_app
+./build/app/mem_leak
 ```
 
 ## `Valgrind`
@@ -67,13 +67,13 @@ We can use the `-p` switch and pass `Top` the PID to watch just our app running:
 Finding the process each time is repetitive, so we can filter out the PID from the list of processes using:
 
 ```shell
-ps -aux | grep my_app | head -n 1 | awk '{print $2}'
+ps -aux | grep mem_leak | head -n 1 | awk '{print $2}'
 ```
 
 Together with the previous command we get:
 
 ```shell
-top -p $(ps -aux | grep my_app | head -n 1 | awk '{print $2}')
+top -p $(ps -aux | grep mem_leak | head -n 1 | awk '{print $2}')
 ```
 
 Which displays the memory usage of the app with the new PID each time `Top` is run. Now press `E` to see the memory displayed in different formats, e.g. MB, GB, TB, etc.
