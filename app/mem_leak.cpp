@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <cstring>
 #include <iostream>
 
@@ -14,7 +15,7 @@ int main(int argc, char* argv[]) {
                   << "  container        vector<T*>::clear() without delete\n"
                   << "  circular         shared_ptr reference cycle\n"
                   << "  all              run all examples\n";
-        return 1;
+        return EXIT_FAILURE;
     }
 
     const char* name = argv[1];
@@ -30,5 +31,5 @@ int main(int argc, char* argv[]) {
     if (std::strcmp(name, "circular") == 0 || std::strcmp(name, "all") == 0)
         circular_shared_ptr();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
