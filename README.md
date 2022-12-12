@@ -4,11 +4,41 @@ These are my personal notes for myself to help with future debugging. Every `new
 
 ## TL;DR
 
-1. Build the project from the project root or using IDE: `make build`
-2. Run the program from the command line: `make run` or `./cmake-build-debug/app/my_app`
-3. Open another `Tmux` pane and run `Top` to see memory usage: `top -p $(ps -aux | grep my_app | head -n 1 | awk '{print $2}')`
-4. Press `E` to see memory usage in mb in `Top`.
-5. Run `Valgrind` to find the memory leak: `valgrind --leak-check=full ./my_app`
+1. Build: `cmake -B build && cmake --build build`
+2. Run a leak example: `./build/app/my_app missing_delete`
+3. Run `Valgrind` against it: `valgrind --leak-check=full ./build/app/my_app missing_delete`
+4. Or run all examples at once: `valgrind --leak-check=full ./build/app/my_app all`
+5. Use `Top` to watch memory usage: `top -p $(pgrep my_app)`
+
+## Leak Examples
+
+The app includes 5 runnable examples, one per common leak category:
+
+| Command | What leaks | Why |
+|---|---|---|
+| `missing_delete` | `new int[100]` | No matching `delete[]` |
+| `lost_pointer` | `new int(1)` | Pointer reassigned before freeing the original |
+| `error_path` | `new int[50]` | Early return skips `delete[]` |
+| `container` | 5x `new int` in a `vector<int*>` | `vector::clear()` destroys pointers, not pointees |
+| `circular` | Two `shared_ptr<Node>` | Circular references keep ref counts above zero |
+
+Run a single example to isolate one leak type in Valgrind output:
+
+```shell
+valgrind --leak-check=full ./build/app/my_app error_path
+```
+
+Or run them all:
+
+```shell
+valgrind --leak-check=full ./build/app/my_app all
+```
+
+Run with no arguments to see usage:
+
+```shell
+./build/app/my_app
+```
 
 ## `Valgrind`
 
