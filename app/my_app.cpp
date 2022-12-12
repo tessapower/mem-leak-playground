@@ -1,18 +1,34 @@
-#include <chrono>
+#include <cstring>
 #include <iostream>
-#include <thread>
 
-#include <my_lib/my_lib.h>
+#include "leaks.h"
 
-int main(const int argc, const char* argv[]) {
-  std::cout << "starting mem leak" << std::endl;
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cout << "Usage: my_app <example>\n"
+                  << "\n"
+                  << "Examples:\n"
+                  << "  missing_delete   new[] without delete[]\n"
+                  << "  lost_pointer     pointer reassignment leaks original\n"
+                  << "  error_path       early return skips cleanup\n"
+                  << "  container        vector<T*>::clear() without delete\n"
+                  << "  circular         shared_ptr reference cycle\n"
+                  << "  all              run all examples\n";
+        return 1;
+    }
 
-//  while (true) {
-    using namespace std::chrono_literals;
-    bool* arr = new bool[1025];
-    std::this_thread::sleep_for(10ms);
-    delete[] arr;
-//  }
+    const char* name = argv[1];
 
-    return EXIT_SUCCESS;
+    if (std::strcmp(name, "missing_delete") == 0 || std::strcmp(name, "all") == 0)
+        missing_delete();
+    if (std::strcmp(name, "lost_pointer") == 0 || std::strcmp(name, "all") == 0)
+        lost_pointer();
+    if (std::strcmp(name, "error_path") == 0 || std::strcmp(name, "all") == 0)
+        error_path();
+    if (std::strcmp(name, "container") == 0 || std::strcmp(name, "all") == 0)
+        container_of_raw_ptrs();
+    if (std::strcmp(name, "circular") == 0 || std::strcmp(name, "all") == 0)
+        circular_shared_ptr();
+
+    return 0;
 }
